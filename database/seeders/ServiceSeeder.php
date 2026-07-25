@@ -14,7 +14,8 @@ class ServiceSeeder extends Seeder
     public function run(): void
     {
         $services = [
-            'Wellness Coach',
+            'Homepage',
+            // 'Wellness Coach',
             'Success Coach',
             'Team Building',
             'Professional MC / Host',

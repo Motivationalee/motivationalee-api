@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\YoutubeContentRequest;
 use App\Models\YoutubeContent;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class YoutubeContentController extends Controller
 {
@@ -13,7 +14,18 @@ class YoutubeContentController extends Controller
      */
     public function index(Request $request)
     {
-        return YoutubeContent::paginate($request->input('per_page', 10));
+        $isAuth = Auth::check();
+        $query = YoutubeContent::query()->with('service');
+
+        if(!$isAuth && !$request->has('service')) throw new \Exception('Service is required');
+        
+        if($request->has('service')) {
+            $query->whereHas('service', function($query) use($request, $isAuth) {
+                $isAuth ? $query->where('id', $request->input('service')) : $query->where('name', 'LIKE', '%'.$request->input('service').'%');
+            });
+        }
+
+        return $query->paginate($request->input('per_page', 10));
     }
 
     /**

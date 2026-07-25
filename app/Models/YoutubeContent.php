@@ -11,4 +11,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class YoutubeContent extends Model
 {
     use HasUuids, SoftDeletes;
+
+    public function service() {
+        return $this->belongsTo(Service::class);
+    }
 }

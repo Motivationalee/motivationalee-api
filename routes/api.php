@@ -8,13 +8,17 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\TestimonialController;
 use App\Http\Controllers\YoutubeContentController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/refresh', [AuthController::class, 'refresh']);
+Route::get('/blogs', [BlogController::class, 'index']);
+Route::get('/blog/{slug}', [BlogController::class, 'show']);
 Route::get('/testimonials', [TestimonialController::class, 'index']);
 Route::get('/youtube-contents', [YoutubeContentController::class, 'index']);
 Route::get('/galleries', [GalleryController::class, 'index']);
+Route::post('/book-consultation', [ConsultationController::class, 'store']);
 
 Route::middleware('auth:api')->group(function () {
     Route::get('/profile', [AuthController::class, 'profile']);
@@ -30,6 +34,7 @@ Route::middleware('auth:api')->group(function () {
         Route::apiResource('galleries', GalleryController::class)->except(['show']);
         Route::apiResource('youtube-contents', YoutubeContentController::class)->except(['show']);
         Route::apiResource('consultations', ConsultationController::class)->except(['show']);
+        Route::apiResource('users', UserController::class)->except(['show']);
 
         Route::prefix('archived')->group(function() {
             Route::get('services', [ServiceController::class, 'archiveList']);
@@ -55,6 +60,10 @@ Route::middleware('auth:api')->group(function () {
             Route::get('consultations', [ConsultationController::class, 'archiveList']);
             Route::get('consultations/{id}', [ConsultationController::class, 'archiveRestore']);
             Route::delete('consultations/{id}', [ConsultationController::class, 'archiveDelete']);
+
+            Route::get('users', [UserController::class, 'archiveList']);
+            Route::get('users/{id}', [UserController::class, 'archiveRestore']);
+            Route::delete('users/{id}', [UserController::class, 'archiveDelete']);
         });
     });
 });

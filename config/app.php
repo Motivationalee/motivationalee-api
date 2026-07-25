@@ -53,6 +53,7 @@ return [
     */
 
     'url' => env('APP_URL', 'http://localhost'),
+    'web_app_url' => env('WEB_APP_URL', 'http://localhost:5173'),
 
     /*
     |--------------------------------------------------------------------------
@@ -122,5 +123,7 @@ return [
         'driver' => env('APP_MAINTENANCE_DRIVER', 'file'),
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
+
+    'super_admin_email' => env('SUPER_ADMIN_EMAIL', 'admin@motivationalee.com')
 
 ];

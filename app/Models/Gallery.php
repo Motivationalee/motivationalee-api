@@ -23,4 +23,8 @@ class Gallery extends Model
             ? asset(Storage::url($this->image))
             : null;
     }
+
+    public function service() {
+        return $this->belongsTo(Service::class);
+    }
 }

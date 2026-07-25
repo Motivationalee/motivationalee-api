@@ -6,6 +6,7 @@ use App\Http\Requests\GalleryRequest;
 use App\Models\Gallery;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 class GalleryController extends Controller
 {
@@ -14,7 +15,17 @@ class GalleryController extends Controller
      */
     public function index(Request $request)
     {
-        return Gallery::paginate($request->input('per_page', 10));
+        $isAuth = Auth::check();
+        $query = Gallery::query()->with('service');
+        
+        if(!$isAuth && !$request->has('service')) throw new \Exception('Service is required');
+        
+        if($request->has('service')) {
+            $query->whereHas('service', function($query) use($request, $isAuth) {
+                $isAuth ? $query->where('id', $request->input('service')) : $query->where('name', 'LIKE', '%'.$request->input('service').'%');
+            });
+        }
+        return $query->latest()->paginate($request->input('per_page', 10));
     }
 
     /**

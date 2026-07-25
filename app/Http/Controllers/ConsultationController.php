@@ -3,8 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ConsultationRequest;
+use App\Mail\ConsultationBookedMail;
 use App\Models\Consultation;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
+use Throwable;
 
 class ConsultationController extends Controller
 {
@@ -21,7 +25,19 @@ class ConsultationController extends Controller
      */
     public function store(ConsultationRequest $request)
     {
-        return Consultation::create($request->all());
+        $consultation = Consultation::create($request->validated());
+
+        try {
+            Mail::to(config('mail.from.address'))->send(new ConsultationBookedMail($consultation));
+        } catch (Throwable $e) {
+            Log::error('Failed to send consultation booked email.', [
+                'consultation_id' => $consultation->id,
+                'to' => config('mail.from.address'),
+                'error' => $e->getMessage(),
+            ]);
+        }
+
+        return $consultation;
     }
 
     /**
@@ -35,9 +51,14 @@ class ConsultationController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(ConsultationRequest $request, Consultation $consultation)
+    public function update(Request $request, Consultation $consultation)
     {
-        $consultation->update($request->all());
+        $validated = $request->validate([
+            'is_replied' => 'required|boolean',
+        ]);
+
+        $consultation->update($validated);
+
         return Consultation::find($consultation->id);
     }
 

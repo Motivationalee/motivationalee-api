@@ -21,7 +21,7 @@ class ServiceController extends Controller
      */
     public function store(ServiceRequest $request)
     {
-        return Service::create($request->all());
+        return Service::create($request->validated());
     }
 
     /**
@@ -37,7 +37,7 @@ class ServiceController extends Controller
      */
     public function update(ServiceRequest $request, Service $service)
     {
-        $service->update($request->all());
+        $service->update($request->validated());
         return Service::find($service->id);
     }
 

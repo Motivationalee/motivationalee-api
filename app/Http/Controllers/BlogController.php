@@ -14,7 +14,7 @@ class BlogController extends Controller
      */
     public function index(Request $request)
     {
-        return Blog::paginate($request->input('per_page', 10));
+        return Blog::latest()->paginate($request->input('per_page', 10));
     }
 
     /**
@@ -39,9 +39,9 @@ class BlogController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Blog $blog)
+    public function show(string $slug)
     {
-        //
+        return Blog::where('slug', $slug)->firstOrFail();
     }
 
     /**
