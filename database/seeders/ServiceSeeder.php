@@ -15,12 +15,9 @@ class ServiceSeeder extends Seeder
     {
         $services = [
             'Homepage',
-            // 'Wellness Coach',
-            'Success Coach',
-            'Team Building',
-            'Professional MC / Host',
-            'Motivational Speaker',
-            'Voice Over',
+            'Keynote Speaker',
+            'Professional MC & Host',
+            'Event Experience Director'
         ];
 
         foreach ($services as $service) {
