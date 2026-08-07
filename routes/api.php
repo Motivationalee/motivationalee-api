@@ -9,6 +9,7 @@ use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\TestimonialController;
 use App\Http\Controllers\YoutubeContentController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\EnquiryController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/login', [AuthController::class, 'login']);
@@ -19,6 +20,7 @@ Route::get('/testimonials', [TestimonialController::class, 'index']);
 Route::get('/youtube-contents', [YoutubeContentController::class, 'index']);
 Route::get('/galleries', [GalleryController::class, 'index']);
 Route::post('/book-consultation', [ConsultationController::class, 'store']);
+Route::post('/book-enquiry', [EnquiryController::class, 'store']);
 
 Route::middleware('auth:api')->group(function () {
     Route::get('/profile', [AuthController::class, 'profile']);
@@ -35,6 +37,7 @@ Route::middleware('auth:api')->group(function () {
         Route::apiResource('youtube-contents', YoutubeContentController::class)->except(['show']);
         Route::apiResource('consultations', ConsultationController::class)->except(['show']);
         Route::apiResource('users', UserController::class)->except(['show']);
+        Route::apiResource('enquiries', EnquiryController::class)->except(['show']);
 
         Route::prefix('archived')->group(function() {
             Route::get('services', [ServiceController::class, 'archiveList']);
@@ -64,6 +67,10 @@ Route::middleware('auth:api')->group(function () {
             Route::get('users', [UserController::class, 'archiveList']);
             Route::get('users/{id}', [UserController::class, 'archiveRestore']);
             Route::delete('users/{id}', [UserController::class, 'archiveDelete']);
+
+            Route::get('enquiries', [EnquiryController::class, 'archiveList']);
+            Route::get('enquiries/{id}', [EnquiryController::class, 'archiveRestore']);
+            Route::delete('enquiries/{id}', [EnquiryController::class, 'archiveDelete']);
         });
     });
 });

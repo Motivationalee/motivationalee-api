@@ -12,13 +12,27 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        User::query()->updateOrCreate(
-            ['email' => 'admin@motivationalee.com'],
+        $users = [
+            [
+                'name' => 'Lee Montajes',
+                'email' => 'admin@leemontajes.com.au',
+                'password' => 'Default123'
+            ],
             [
                 'name' => 'Admin',
-                'password' => 'Default123',
-                'email_verified_at' => now(),
-            ],
-        );
+                'email' => 'admin@motivationalee.com',
+                'password' => 'Default123'
+            ]
+        ];
+        foreach($users as $user) {
+            User::query()->updateOrCreate(
+                ['email' => $user['email']],
+                [
+                    'name' => $user['name'],
+                    'password' => $user['password'],
+                    'email_verified_at' => now(),
+                ],
+            );
+        }
     }
 }
