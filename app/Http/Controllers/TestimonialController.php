@@ -22,15 +22,13 @@ class TestimonialController extends Controller
      */
     public function store(TestimonialRequest $request)
     {
-        $request->validate([
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        ]);
-
-        $path = $request->file('image')->store('testimonials', 'public');
+        if($request->hasFile('image')) {
+            $path = $request->file('image')->store('testimonials', 'public');
+        }
 
         $payload = [
             ...$request->validated(),
-            'image' => $path
+            'image' => $path ?? null
         ];
 
         return Testimonial::create($payload);
@@ -57,7 +55,7 @@ class TestimonialController extends Controller
         }
         $payload = [
             ...$request->validated(),
-            'image' => $path ?? $testimonial->image
+            'image' => $path ?? $testimonial->image ?? null
         ];
         $testimonial->update($payload);
         return Testimonial::find($testimonial->id);
