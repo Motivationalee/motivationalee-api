@@ -7,6 +7,7 @@ use App\Models\Consultation;
 use App\Models\Gallery;
 use App\Models\Testimonial;
 use App\Models\YoutubeContent;
+use App\Models\Enquiry;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -35,13 +36,15 @@ class DashboardController extends Controller
         $galleries = Gallery::count();
         $youtubeContents = YoutubeContent::count();
         $consultations = Consultation::count();
+        $enquiries = Enquiry::count();
 
         return [
             'blogs' => $blogs,
             'testimonials' => $testimonials,
             'galleries' => $galleries,
             'youtubeContents' => $youtubeContents,
-            'consultations' => $consultations
+            'consultations' => $consultations,
+            'enquiries' => $enquiries
         ];
     }
 }
